@@ -24,7 +24,9 @@ router.get('/:id', checkAccountId, (req, res) => {
 router.post('/', checkAccountPayload, checkAccountNameUnique, async (req, res, next) => {
   // DO YOUR MAGIC
   try {
-    const newAccount = await Account.create(req.body)
+    const name = req.body.name.trim()
+    const budget = req.body.budget
+    const newAccount = await Account.create({name, budget})
     res.status(201).json(newAccount)
   } catch (err) {
     next(err)
@@ -46,7 +48,7 @@ router.delete('/:id', checkAccountId, async (req, res, next) => {
   // DO YOUR MAGIC
   try{
     const { id } = req.params
-    const deletedAccount = await Account.remove(id)
+    const deletedAccount = await Account.deleteById(id)
     res.json(deletedAccount)
   } catch (err) {
     next(err)
